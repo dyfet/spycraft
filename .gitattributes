@@ -1,0 +1,17 @@
+*           text eol=lf
+*.au        filter=lfs diff=lfs merge=lfs binary
+*.gif       filter=lfs diff=lfs merge=lfs binary
+*.ico       filter=lfs diff=lfs merge=lfs binary
+*.jpg       filter=lfs diff=lfs merge=lfs binary
+*.png       filter=lfs diff=lfs merge=lfs binary
+*.jpeg      filter=lfs diff=lfs merge=lfs binary
+
+.woodpecker.yml export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+.gitea/ export-ignore
+.gitlab-ci.yml export-ignore
+.gitlab/ export-ignore
+
+.make/dist.mk export-ignore
+.make/deploy.* export-ignore

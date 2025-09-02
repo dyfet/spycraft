@@ -1,0 +1,68 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Make: build",
+            "type": "process",
+            "group": {
+                "kind": "build",
+                "isDefault": "true"
+            },
+            "command": "bash",
+            "args": [
+                "-c",
+                "make all"
+            ],
+            "problemMatcher": [
+                "$go"
+            ],
+            "detail": "Make debug build"
+        },
+        {
+            "label": "Make: release",
+            "type": "process",
+            "group": "build",
+            "command": "bash",
+            "args": [
+                "-c",
+                "make release"
+            ],
+            "problemMatcher": [
+                "$go"
+            ],
+            "detail": "Make release build"
+        },
+        {
+            "label": "Make: clean",
+            "type": "process",
+            "command": "bash",
+            "args": [
+		        "-c",
+                "make clean"
+            ],
+            "problemMatcher": [],
+            "detail": "clean all build targets"
+        },
+        {
+            "label": "Make: lint",
+            "type": "process",
+            "command": "bash",
+            "args": [
+                "-c",
+                "make lint"
+            ],
+            "detail": "run project linting"
+        },
+        {
+            "label": "Make: test",
+            "type": "process",
+            "group": "test",
+            "command": "bash",
+            "args": [
+                "-c",
+                "make test"
+            ],
+            "detail":"run unit tests"
+        }
+    ]
+}

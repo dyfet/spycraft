@@ -1,0 +1,13 @@
+custom.mk
+target/
+vendor/
+test/
+.vs/
+
+*.db
+*.uuid
+*.pcap
+*.log
+*.out
+*.tar
+*.tar.gz
