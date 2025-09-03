@@ -27,6 +27,7 @@ type LegEvent struct {
 
 type Leg struct {
 	Collated  string // will have CallID if neither end has collation
+	Agent     string
 	Endpoint  net.IP
 	Port      uint16
 	Incoming  bool

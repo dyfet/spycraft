@@ -59,7 +59,7 @@ func Messages(wg *sync.WaitGroup) {
 		}
 
 		var version, status, reason, uri, method []byte
-		incoming := message.Incoming
+		incoming := message.Incoming // event direction...
 		if bytes.HasPrefix(fields[0], []byte("SIP/")) {
 			// Response
 			version = fields[0]
@@ -75,7 +75,7 @@ func Messages(wg *sync.WaitGroup) {
 			service.Debugf(3, "Request: %s %s %s", method, uri, version)
 		}
 
-		var key, value, callid, collateid []byte
+		var key, value, callid, collateid, agent []byte
 		for i := 1; i < len(headers); i++ {
 			key, value = byteshark.SplitKeypair(headers[i], ':')
 			service.Debugf(6, "%s: %s", key, value)
@@ -86,6 +86,10 @@ func Messages(wg *sync.WaitGroup) {
 			if byteshark.MatchKeyword(key, []byte("x-collateid")) {
 				collateid = value
 				continue
+			}
+			// collect from incoming packets...
+			if message.Incoming && byteshark.MatchKeyword(key, []byte("user-agent")) {
+				agent = value
 			}
 		}
 		if len(callid) == 0 {
@@ -136,6 +140,7 @@ func Messages(wg *sync.WaitGroup) {
 				if incoming {
 					leg.States[0].Request = Active
 					leg.States[1].Request = Invite
+					leg.Agent = string(agent)
 				} else {
 					leg.States[0].Request = Invite
 					leg.States[1].Request = Active
@@ -163,7 +168,13 @@ func Messages(wg *sync.WaitGroup) {
 		}
 
 		leg.Updated = message.Timestamp
+		if message.Incoming && len(leg.Agent) == 0 {
+			leg.Agent = string(agent) // fill from remote endpoint
+		}
 		if incoming {
+			if len(leg.Agent) == 0 {
+				leg.Agent = string(agent)
+			}
 			event.Selected = &leg.States[1]
 		} else {
 			event.Selected = &leg.States[0]

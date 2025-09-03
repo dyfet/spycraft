@@ -9,17 +9,17 @@ import (
 	"github.com/google/gopacket/reassembly"
 )
 
-type SIPStream struct {
+type TCPStream struct {
 	//	net, Transport gopacket.Flow
 	buf     bytes.Buffer
 	msgChan chan []byte
 }
 
-func (s *SIPStream) ReassembledSG(sg reassembly.ScatterGather, ac reassembly.AssemblerContext) {
+func (s *TCPStream) ReassembledSG(sg reassembly.ScatterGather, ac reassembly.AssemblerContext) {
 	data := sg.Fetch(0)
 	s.buf.Write(data)
 	for {
-		msg, ok := ExtractSIPMessage(s.buf.Bytes())
+		msg, ok := ExtractTCPMessage(s.buf.Bytes())
 		if !ok {
 			break
 		}
@@ -28,7 +28,7 @@ func (s *SIPStream) ReassembledSG(sg reassembly.ScatterGather, ac reassembly.Ass
 	}
 }
 
-func ExtractSIPMessage(data []byte) ([]byte, bool) {
+func ExtractTCPMessage(data []byte) ([]byte, bool) {
 	headerEnd := bytes.Index(data, []byte("\r\n\r\n"))
 	if headerEnd == -1 {
 		return nil, false
